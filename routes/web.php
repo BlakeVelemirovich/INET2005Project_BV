@@ -19,6 +19,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('categories', CategoryController::class)
-    ->only(["create", "store", "index", "edit"]);
+    ->only(["create", "store", "index", "edit", "update"]);
 
 require __DIR__.'/auth.php';

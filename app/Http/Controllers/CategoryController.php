@@ -44,7 +44,7 @@ class CategoryController extends Controller
 
         // Check if the category name already exists
         if (Category::where('name', $validated['categoryName'])->exists()) {
-            return redirect(route("categories.create"))
+            return back()
                 ->withErrors(['categoryName' => 'The category name already exists.'])
                 ->withInput();
         }
@@ -55,7 +55,7 @@ class CategoryController extends Controller
         ]);
 
         // Redirect back to the create category page
-        return redirect(route("categories.create"))
+        return redirect(route("categories.index"))
             ->with('success', 'Category created successfully.')
             ->withInput();
     }
@@ -83,7 +83,32 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        // Capitalize the first letter of the category name to maintain data consistency
+        $request->merge([
+            'categoryName' => ucfirst($request->categoryName)
+        ]);
+
+        // Validation for empty category name and unique category name
+        $validated = $request->validate([
+            "categoryName" => ["required", "unique:categories,categoryName"]
+        ]);
+
+        // Check if the category name already exists
+        if (Category::where('name', $validated['categoryName'])->exists()) {
+            return back()
+                ->withErrors(['categoryName' => 'The category name already exists.'])
+                ->withInput();
+        }
+
+        // Update the category using ORM
+        $category->update([
+            'categoryName' => $validated['categoryName']
+        ]);
+
+        // Redirect back to the edit category page
+        return redirect(route("categories.index"))
+            ->with('success', 'Category updated successfully.')
+            ->withInput();
     }
 
     /**

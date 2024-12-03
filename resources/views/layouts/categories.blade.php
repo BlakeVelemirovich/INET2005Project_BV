@@ -9,7 +9,7 @@
 </head>
 <body>
     <!-- Display all categories using Blade's foreach command -->
-<form>
+<form method="POST" action="{{ route('categories.store') }}">
     <legend>
         <h2>Listing of Category Names</h2>
     </legend>

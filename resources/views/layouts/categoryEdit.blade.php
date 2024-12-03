@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="{{ asset('css/categories.css') }}">
 </head>
 <body>
-    <form>
+    <form method="POST" action="{{ route('categories.update', ['category' => $category->id]) }}">
+        @csrf
+        @method('PUT') <!-- Ensures the HTTP method is PUT -->
         <legend>
             <h2>Edit Category: <b style="color: red;"> {{ $category->categoryName }}</b></h2>
         </legend>
