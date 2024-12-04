@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +21,8 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('categories', CategoryController::class)
     ->only(["create", "store", "index", "edit", "update"]);
+
+Route::resource('items', ItemController::class)
+    ->only(["create", "index", "edit", "store"]);
 
 require __DIR__.'/auth.php';
