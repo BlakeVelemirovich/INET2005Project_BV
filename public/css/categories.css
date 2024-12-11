@@ -98,3 +98,8 @@ a:hover {
 .edit:hover {
     background-color: #000000;
 }
+
+img {
+    width: 10rem;
+    height: 10rem;
+}

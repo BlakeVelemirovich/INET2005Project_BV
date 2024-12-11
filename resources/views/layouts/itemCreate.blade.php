@@ -7,43 +7,42 @@
     <link rel="stylesheet" href="{{ asset('css/categories.css') }}">
 </head>
 <body>
-    <form method="POST" action="{{ route('items.store') }}">
+    <form method="POST" action="{{ route('items.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="formRow">
-            <label for="category">Category:</label>
-            <select name="categoryId" id="category">
+            <label for="categoryId">Category:</label>
+            <select name="categoryId" id="categoryId">
                 @foreach($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->categoryName }}</option>
+                <option value="{{ $category->id }}">{{ $category->categoryName }}</option>
                 @endforeach
             </select>
-            @if($errors->has('category'))
-                <div class="error">{{ $errors->first('category') }}</div>
-            @endif
         </div>
 
         <div class="formRow">
-            <label for="title">Title:</label>
+            <label for="title">Item Name:</label>
             <input
                 type="text"
                 name="title"
                 id="title"
-                placeholder="Enter item title"
+                placeholder="Enter item name"
                 value="{{ old('title') }}"
             >
             @if($errors->has('title'))
-                <div class="error">{{ $errors->first('title') }}</div>
+            <div class="error">{{ $errors->first('title') }}</div>
             @endif
         </div>
 
         <div class="formRow">
-            <label for="description">Description:</label>
-            <textarea
+            <label for="description">Description</label>
+            <input
+                type="text"
                 name="description"
                 id="description"
-                placeholder="Enter item description"
-            >{{ old('description') }}</textarea>
+                placeholder="Enter description"
+                value="{{ old('description') }}"
+            >
             @if($errors->has('description'))
-                <div class="error">{{ $errors->first('description') }}</div>
+            <div class="error">{{ $errors->first('description') }}</div>
             @endif
         </div>
 
@@ -53,54 +52,46 @@
                 type="text"
                 name="price"
                 id="price"
-                placeholder="Enter item price"
+                placeholder="Enter the price"
                 value="{{ old('price') }}"
             >
             @if($errors->has('price'))
-                <div class="error">{{ $errors->first('price') }}</div>
+            <div class="error">{{ $errors->first('price') }}</div>
+            @endif
+        </div>
+
+        <div class="formRow">
+            <label for="sku">Sku:</label>
+            <input
+                type="text"
+                name="sku"
+                id="sku"
+                placeholder="Enter sku"
+                value="{{ old('sku') }}"
+            >
+            @if($errors->has('sku'))
+            <div class="error">{{ $errors->first('sku') }}</div>
             @endif
         </div>
 
         <div class="formRow">
             <label for="quantity">Quantity:</label>
             <input
-                type="text"
-                name="quantity"
-                id="quantity"
-                placeholder="Enter item quantity"
-                value="{{ old('quantity') }}"
+            type="number"
+            name="quantity"
+            id="quantity"
+            placeholder="Enter quantity"
+            value="{{ old('quantity') }}"
+            min="0"
             >
             @if($errors->has('quantity'))
-                <div class="error">{{ $errors->first('quantity') }}</div>
+            <div class="error">{{ $errors->first('quantity') }}</div>
             @endif
         </div>
 
         <div class="formRow">
-            <label for="sku">SKU:</label>
-            <input
-                type="text"
-                name="sku"
-                id="sku"
-                placeholder="Enter item SKU"
-                value="{{ old('sku') }}"
-            >
-            @if($errors->has('sku'))
-                <div class="error">{{ $errors->first('sku') }}</div>
-            @endif
-        </div>
-
-        <div class="formRow">
-            <label for="picture">Picture:</label>
-            <input
-                type="text"
-                name="picture"
-                id="picture"
-                placeholder="Enter item picture URL"
-                value="{{ old('picture') }}"
-            >
-            @if($errors->has('picture'))
-                <div class="error">{{ $errors->first('picture') }}</div>
-            @endif
+            <label for="picture">image:</label>
+            <input type="file" name="picture" id="picture">
         </div>
 
         <input type="submit" value="Submit Form" class="mt-5">

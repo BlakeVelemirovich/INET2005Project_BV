@@ -14,9 +14,18 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index()
     {
-        return response("Hello World");
+        // Get all items
+        $items = Item::latest()->get();
+        // Get matching category name
+        $items->map(function ($item) {
+            $item->categoryName = Category::find($item->categoryId)->categoryName;
+        });
+
+        return view("layouts.items", [
+            "items" => $items,
+        ]);
     }
 
     /**
@@ -24,8 +33,11 @@ class ItemController extends Controller
      */
     public function create()
     {
+        // Get all categories, as we will need them for an option dropdown to select category
+        $categories = Category::latest()->get();
+
         return view("layouts.itemCreate", [
-            "categories" => Category::latest()->get(),
+            "categories" => $categories
         ]);
     }
 
@@ -36,7 +48,7 @@ class ItemController extends Controller
     {
         // Capitalize the first letter of the item name to maintain data consistency
         $request->merge([
-            'title' => ucfirst($request->title)
+            'title' => ucfirst($request->itemName)
         ]);
 
         // Validation for empty fields
@@ -47,7 +59,7 @@ class ItemController extends Controller
             "price" => ["required"],
             "quantity" => ["required"],
             "sku" => ["required"],
-            "picture" => ["required"]
+            "picture" => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         // Check if the item title already exists
@@ -57,15 +69,19 @@ class ItemController extends Controller
                 ->withInput();
         }
 
+        // Store the image in the public folder
+        $request->picture->move(public_path('images'), $request->picture->getClientOriginalName());
+        $imagePath = "images/" . $request->picture->getClientOriginalName();
+
         // Create a new item using ORM
         Item::create([
-            'categoryId' => $validated['categoryId'],
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'price' => $validated['price'],
-            'quantity' => $validated['quantity'],
-            'sku' => $validated['sku'],
-            'picture' => $validated['picture']
+            'categoryId' => $request['categoryId'],
+            'title' => $request['title'],
+            'description' => $request['description'],
+            'price' => $request['price'],
+            'quantity' => $request['quantity'],
+            'sku' => $request['sku'],
+            'picture' => $imagePath
         ]);
 
         // Redirect back to the create category page
