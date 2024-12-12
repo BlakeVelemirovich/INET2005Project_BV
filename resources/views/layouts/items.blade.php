@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Item</title>
     <link rel="stylesheet" href="{{ asset('css/items.css') }}">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const deleteButtons = document.querySelectorAll('.delete');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const confirmed = confirm('Are you sure you want to delete this item?');
+                    if (!confirmed) {
+                        // Prevent the form from being submitted
+                        event.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="container">
@@ -32,8 +47,16 @@
                     <td>{{ $item->quantity }}</td>
                     <td><img src="{{ asset($item->picture) }}" alt="{{ $item->title }}" class="itemImage"></td>
                     <td>
-                        <a href="{{ url('/items/' . $item->id . '/edit') }}" class="edit">Edit</a>
-                        <a href="{{ url('/items/' . $item->id . '/delete') }}" class="delete">Delete</a>
+                        <form action="{{ route('items.edit', $item->id) }}" method="GET" style="display:inline;">
+                            @csrf
+                            @method('GET')
+                            <button type="submit" class="edit">Edit</button>
+                        </form>
+                        <form action="{{ route('items.destroy', $item->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="delete">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
@@ -46,3 +69,4 @@
     </div>
 </body>
 </html>
+

@@ -23,6 +23,6 @@ Route::resource('categories', CategoryController::class)
     ->only(["create", "store", "index", "edit", "update"]);
 
 Route::resource('items', ItemController::class)
-    ->only(["create", "index", "edit", "store"]);
+    ->only(["create", "index", "edit", "store", "destroy", "update"]);
 
 require __DIR__.'/auth.php';
